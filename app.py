@@ -1,5 +1,5 @@
 from flask import Flask, request
-from flask.ext.socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -21,5 +21,5 @@ def button_login():
             global BUTTON_PUSHED
             BUTTON_PUSHED = data.get("clickType", None)
 
-if __main__ == __name__:
+if __name__ == '__main__':
     socketio.run(app)
