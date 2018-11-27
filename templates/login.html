@@ -1,0 +1,41 @@
+<html>
+<head>
+<title>Login</title>
+</head>
+<style>
+.box {
+    padding: 20px;
+    color: #fff;
+    width: 200px;
+    font-weight: bold;
+}
+.box.good {
+    background-color: green;
+}
+.box.bad {
+    background-color: red;
+}
+
+table {
+    text-align: center;
+    margin: auto;
+    width: 33%;
+}
+</style>
+<body>
+Please use the following button sequence to login:
+<br>
+<table>
+    <tr>
+    {% for v in status %}
+        {% if v['authed'] %}
+            <td class="box good">{{ v['value'] }}</td>
+        {% else %}
+            <td class="box bad">{{ v['value'] }}</td>
+        {% endif %}
+    {% endfor %}
+    </tr>
+</table>
+<meta http-equiv="refresh" content="5">
+</body>
+</html>
