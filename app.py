@@ -59,6 +59,19 @@ def hello_world():
         return render_template("success.html")
     return render_template('login.html', status=status)
 
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        user = request.form.get('user')
+        password = request.form.get('password')
+        if user == "dad" and password == "password":
+            return "User logged in, issue a cookie"
+        return "User not authorized (will redirect back to login page)"
+    else:
+        return "Login page goes here"
+
+
 @app.route('/button', methods=["POST"])
 def button_login():
     if request.method == "POST":
