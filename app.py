@@ -62,13 +62,14 @@ def hello_world():
 @app.route('/button', methods=["POST"])
 def button_login():
     if request.method == "POST":
+        #return str(request.args)
         try:
             global BUTTON_PUSHED
             val = BUTTON_STATUS.update(request.args['value'])
             return json.dumps({'status': val})
         except:
             pass
-    #return '{"status":"False"}\n'
+    return '{"status":"False"}\n'
     abort(404)
 
 if __name__ == '__main__':
