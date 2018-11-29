@@ -1,13 +1,11 @@
 import random
 import json
-from flask import Flask, request, abort, render_template
+from flask import Flask, request, abort, render_template, redirect
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 
-button_types = ['DOUBLE', 'SINGLE', 'LONG']
-
-
+button_types = {'DOUBLE':'..', 'SINGLE':'.', 'LONG':'-'}
 
 
 class ButtonStatus(object):
@@ -20,12 +18,12 @@ class ButtonStatus(object):
     def newCode(self, count=3):
         self.code = []
         for i in range(count):
-            self.code.append(random.choice(button_types))
+            self.code.append(random.choice(list(button_types.keys())))
         self.log("Generated new code:", self.code)
         self.status = []
     
     def update(self, value):
-        if value in button_types:
+        if value in button_types.keys():
             self.status.append(value)
             if len(self.status) > 3:
                 self.status = self.status[-3:]
@@ -51,13 +49,20 @@ class ButtonStatus(object):
     def log(self, *args, **kwargs):
         print(*args, **kwargs)
 
+
+@app.route('/logout')
+def logout():
+    BUTTON_STATUS.newCode()  # Regen the code
+    return redirect('/')
+    
+
 @app.route('/')
 def hello_world():
     is_authed, status = BUTTON_STATUS.getStatus()
     if is_authed:
-        BUTTON_STATUS.newCode()  # Regen the code
+        #BUTTON_STATUS.newCode()  # Regen the code
         return render_template("success.html")
-    return render_template('login.html', status=status)
+    return render_template('login.html', status=status, button_types=button_types)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -84,6 +89,7 @@ def button_login():
             pass
     return '{"status":"False"}\n'
     abort(404)
+
 
 if __name__ == '__main__':
     global BUTTON_STATUS
